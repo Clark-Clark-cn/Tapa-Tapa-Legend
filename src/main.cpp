@@ -13,6 +13,7 @@
 #include "rcpBoxBundle.h"
 #include "microwaveOven.h"
 #include "takeoutBox.h"
+#include "trashCan.h"
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -44,6 +45,7 @@ void initRegions()
     regionMgr::Instance()->add("takeout_box_2", new TakeoutBox(935, 580));
     regionMgr::Instance()->add("takeout_box_3", new TakeoutBox(1040, 580));
     regionMgr::Instance()->add("takeout_box_4", new TakeoutBox(1145, 580));
+    regionMgr::Instance()->add("trash_can", new TrashCan(50, 550));
 }
 
 void onUpdate(float delta)
