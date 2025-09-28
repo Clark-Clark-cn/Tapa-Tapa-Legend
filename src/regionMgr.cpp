@@ -1,4 +1,5 @@
 #include "regionMgr.h"
+#include "cursorMgr.h"
 
 regionMgr *regionMgr::manager = nullptr;
 
@@ -45,13 +46,19 @@ void regionMgr::onInput(const SDL_Event &event)
     case SDL_MOUSEBUTTONUP:
         if (event.button.button == SDL_BUTTON_LEFT)
         {
-
+            bool handled = false;
             for (auto &pair : regionPool)
             {
                 SDL_Point pos = {event.motion.x, event.motion.y};
                 if (SDL_PointInRect(&pos, &pair.second->getRect()))
+                {
                     pair.second->onCursorUp();
+                    handled = true;
+                }
             }
+            if(!handled&&CursorMgr::Instance()->getPicked()!=Meal::None&&CursorMgr::Instance()->getSource()!=nullptr)
+                CursorMgr::Instance()->getSource()->onReturn(CursorMgr::Instance()->getPicked());
+                CursorMgr::Instance()->setPicked(Meal::None);
         }
         break;
     }

@@ -12,7 +12,7 @@ void BcBoxBundle::onCursorUp()
 void BcBoxBundle::onCursorDown()
 {
     if (CursorMgr::Instance()->getPicked() == Meal::None)
-        CursorMgr::Instance()->setPicked(Meal::BraisedChicken_Box);
+        CursorMgr::Instance()->setPicked(Meal::BraisedChicken_Box, this);
 }
 
 void BcBoxBundle::onRender(SDL_Renderer *renderer)

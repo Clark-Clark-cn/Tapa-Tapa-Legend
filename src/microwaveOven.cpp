@@ -48,7 +48,7 @@ void MicrowaveOven::onCursorDown()
 
     if (CursorMgr::Instance()->getPicked() == Meal::None)
     {
-        CursorMgr::Instance()->setPicked(mealTarget);
+        CursorMgr::Instance()->setPicked(mealTarget, this);
         mealTarget = Meal::None;
     }
 }
@@ -92,6 +92,11 @@ void MicrowaveOven::onRender(SDL_Renderer *renderer)
     }
     SDL_RenderDrawRect(renderer, &rect);
 
+}
+
+void MicrowaveOven::onReturn(Meal meal)
+{
+    if(canPlace(meal))mealTarget=meal;
 }
 
 bool MicrowaveOven::canPlace(Meal target)

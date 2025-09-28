@@ -12,7 +12,7 @@ void SpriteBundle::onCursorUp()
 void SpriteBundle::onCursorDown()
 {
     if (CursorMgr::Instance()->getPicked() == Meal::None)
-        CursorMgr::Instance()->setPicked(Meal::Sprite);
+        CursorMgr::Instance()->setPicked(Meal::Sprite, this);
 }
 
 void SpriteBundle::onRender(SDL_Renderer *renderer)

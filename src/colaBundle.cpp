@@ -12,7 +12,7 @@ void ColaBundle::onCursorUp()
 void ColaBundle::onCursorDown()
 {
     if (CursorMgr::Instance()->getPicked() == Meal::None)
-        CursorMgr::Instance()->setPicked(Meal::Cola);
+        CursorMgr::Instance()->setPicked(Meal::Cola, this);
 }
 
 void ColaBundle::onRender(SDL_Renderer *renderer)

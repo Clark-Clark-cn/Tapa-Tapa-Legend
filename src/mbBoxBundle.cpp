@@ -12,7 +12,7 @@ void MbBoxBundle::onCursorUp()
 void MbBoxBundle::onCursorDown()
 {
     if (CursorMgr::Instance()->getPicked() == Meal::None)
-        CursorMgr::Instance()->setPicked(Meal::MeatBall_Box);
+        CursorMgr::Instance()->setPicked(Meal::MeatBall_Box, this);
 }
 
 void MbBoxBundle::onRender(SDL_Renderer *renderer)

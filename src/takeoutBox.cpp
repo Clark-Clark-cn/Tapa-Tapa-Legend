@@ -36,7 +36,7 @@ void TakeoutBox::onCursorDown()
 {
     if (CursorMgr::Instance()->getPicked() == Meal::None)
     {
-        CursorMgr::Instance()->setPicked(meal);
+        CursorMgr::Instance()->setPicked(meal, this);
         meal = Meal::None;
     }
 }
@@ -79,6 +79,11 @@ void TakeoutBox::onRender(SDL_Renderer *renderer)
         SDL_RenderCopy(renderer, texture, nullptr, &rectTexture);
     }
     SDL_RenderDrawRect(renderer, &rect);
+}
+
+void TakeoutBox::onReturn(Meal target)
+{
+    if(canPlace(target))meal=target;
 }
 
 bool TakeoutBox::canPlace(Meal target)

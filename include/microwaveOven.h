@@ -13,6 +13,7 @@ public:
     void onCursorDown() override;
     void onUpdate(float delta) override;
     void onRender(SDL_Renderer *renderer) override;
+    void onReturn(Meal meal) override;
 
 private:
     Timer timer;                  // 工作定时器

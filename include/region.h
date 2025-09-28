@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include "meal.h"
 
 class Region
 {
@@ -12,6 +13,7 @@ public:
     virtual void onRender(SDL_Renderer *renderer) {}
     virtual void onCursorDown() {}
     virtual void onCursorUp() {}
+    virtual void onReturn(Meal meal) {}
 
     void setRect(const SDL_Rect &rect)
     {

@@ -12,7 +12,7 @@ void TbBundle::onCursorUp()
 void TbBundle::onCursorDown()
 {
     if (CursorMgr::Instance()->getPicked() == Meal::None)
-        CursorMgr::Instance()->setPicked(Meal::TakeoutBox);
+        CursorMgr::Instance()->setPicked(Meal::TakeoutBox, this);
 }
 
 void TbBundle::onRender(SDL_Renderer *renderer)

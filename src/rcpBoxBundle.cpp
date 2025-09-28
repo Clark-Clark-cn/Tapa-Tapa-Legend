@@ -12,7 +12,7 @@ void RcpBoxBundle::onCursorUp()
 void RcpBoxBundle::onCursorDown()
 {
     if (CursorMgr::Instance()->getPicked() == Meal::None)
-        CursorMgr::Instance()->setPicked(Meal::RedCookedPork_Box);
+        CursorMgr::Instance()->setPicked(Meal::RedCookedPork_Box, this);
 }
 
 void RcpBoxBundle::onRender(SDL_Renderer *renderer)

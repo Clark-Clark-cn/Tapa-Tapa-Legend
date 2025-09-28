@@ -103,14 +103,20 @@ void CursorMgr::onRender(SDL_Renderer *renderer)
     SDL_Texture *textureCursor = ResMgr::Instance()->findTexture(isMouseLbtnDown ? "cursor_down" : "cursor_idle");
     SDL_RenderCopy(renderer, textureCursor, nullptr, &rectCursor);
 }
-void CursorMgr::setPicked(Meal meal)
+void CursorMgr::setPicked(Meal meal, Region* src)
 {
     mealPicked = meal;
+    source = src;
 }
 
 Meal CursorMgr::getPicked()
 {
     return mealPicked;
+}
+
+Region* CursorMgr::getSource()
+{
+    return source;
 }
 
 CursorMgr::CursorMgr() = default;
