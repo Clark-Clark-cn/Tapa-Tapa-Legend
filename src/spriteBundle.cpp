@@ -3,10 +3,13 @@
 #include "resMgr.h"
 #include "cursorMgr.h"
 
-void SpriteBundle::onCursorUp()
+bool SpriteBundle::onCursorUp()
 {
-    if (CursorMgr::Instance()->getPicked() == Meal::Sprite)
+    if (CursorMgr::Instance()->getPicked() == Meal::Sprite){
         CursorMgr::Instance()->setPicked(Meal::None);
+        return true;
+    }
+    return false;
 }
 
 void SpriteBundle::onCursorDown()
@@ -17,7 +20,6 @@ void SpriteBundle::onCursorDown()
 
 void SpriteBundle::onRender(SDL_Renderer *renderer)
 {
-    static SDL_Texture *texture = ResMgr::Instance()->findTexture("sprite_bundle");
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
     SDL_RenderDrawRect(renderer, &rect);
 }

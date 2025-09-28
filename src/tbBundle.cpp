@@ -3,10 +3,13 @@
 #include "resMgr.h"
 #include "cursorMgr.h"
 
-void TbBundle::onCursorUp()
+bool TbBundle::onCursorUp()
 {
-    if (CursorMgr::Instance()->getPicked() == Meal::TakeoutBox)
+    if (CursorMgr::Instance()->getPicked() == Meal::TakeoutBox){
         CursorMgr::Instance()->setPicked(Meal::None);
+        return true;
+    }
+    return false;
 }
 
 void TbBundle::onCursorDown()
@@ -17,7 +20,6 @@ void TbBundle::onCursorDown()
 
 void TbBundle::onRender(SDL_Renderer *renderer)
 {
-    static SDL_Texture *texture = ResMgr::Instance()->findTexture("tb_bundle");
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
     SDL_RenderDrawRect(renderer, &rect);
 }

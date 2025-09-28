@@ -3,7 +3,7 @@
 #include "resMgr.h"
 #include "cursorMgr.h"
 
-void TakeoutBox::onCursorUp()
+bool TakeoutBox::onCursorUp()
 {
     // 如果当前位置是空的快餐盒
     if (meal == Meal::TakeoutBox)
@@ -13,14 +13,17 @@ void TakeoutBox::onCursorUp()
         case Meal::BraisedChicken_Box:
             meal = Meal::BraisedChicken_Cold;
             CursorMgr::Instance()->setPicked(Meal::None);
+            return true;
             break;
         case Meal::MeatBall_Box:
             meal = Meal::MeatBall_Cold;
             CursorMgr::Instance()->setPicked(Meal::None);
+            return true;
             break;
         case Meal::RedCookedPork_Box:
             meal = Meal::RedCookedPork_Cold;
             CursorMgr::Instance()->setPicked(Meal::None);
+            return true;
             break;
         }
     }
@@ -29,7 +32,9 @@ void TakeoutBox::onCursorUp()
     {
         meal = CursorMgr::Instance()->getPicked();
         CursorMgr::Instance()->setPicked(Meal::None);
+        return true;
     }
+    return false;
 }
 
 void TakeoutBox::onCursorDown()
@@ -43,11 +48,10 @@ void TakeoutBox::onCursorDown()
 
 void TakeoutBox::onRender(SDL_Renderer *renderer)
 {
-    SDL_Texture *texture = nullptr;
-
     switch (meal)
     {
     case Meal::None:
+        texture = nullptr;
         break;
     case Meal::BraisedChicken_Hot:
         texture = ResMgr::Instance()->findTexture("bc_hot");
@@ -74,6 +78,7 @@ void TakeoutBox::onRender(SDL_Renderer *renderer)
 
     if (texture)
     {
+        textureReturn=texture;
         SDL_Rect rectTexture = {rect.x, rect.y, 0, 0};
         SDL_QueryTexture(texture, nullptr, nullptr, &rectTexture.w, &rectTexture.h);
         SDL_RenderCopy(renderer, texture, nullptr, &rectTexture);
@@ -83,7 +88,7 @@ void TakeoutBox::onRender(SDL_Renderer *renderer)
 
 void TakeoutBox::onReturn(Meal target)
 {
-    if(canPlace(target))meal=target;
+    meal=target;
 }
 
 bool TakeoutBox::canPlace(Meal target)

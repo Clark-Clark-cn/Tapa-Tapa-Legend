@@ -13,10 +13,10 @@ MicrowaveOven::MicrowaveOven(int x, int y) : Region({x, y, 284, 176})
     });
 }
 
-void MicrowaveOven::onCursorUp()
+bool MicrowaveOven::onCursorUp()
 {
     if (isWorking)
-        return;
+        return false;
 
     if (mealTarget == Meal::None && canPlace(CursorMgr::Instance()->getPicked()))
     {
@@ -38,7 +38,9 @@ void MicrowaveOven::onCursorUp()
         isWorking = true;
         CursorMgr::Instance()->setPicked(Meal::None);
         Mix_PlayChannel(-1, ResMgr::Instance()->findAudio("mo_working"), 0);
+        return true;
     }
+    return false;
 }
 
 void MicrowaveOven::onCursorDown()
@@ -67,36 +69,35 @@ void MicrowaveOven::onRender(SDL_Renderer *renderer)
 
     if (!isWorking)
     {
-        SDL_Texture *textureContent = nullptr;
         switch (mealTarget)
         {
         case Meal::None:
+            texture = nullptr;
             break;
-
         case Meal::BraisedChicken_Hot:
-            textureContent = ResMgr::Instance()->findTexture("bc_hot_picked");
+            texture = ResMgr::Instance()->findTexture("bc_hot_picked");
             break;
         case Meal::MeatBall_Hot:
-            textureContent = ResMgr::Instance()->findTexture("mb_hot_picked");
+            texture = ResMgr::Instance()->findTexture("mb_hot_picked");
             break;
         case Meal::RedCookedPork_Hot:
-            textureContent = ResMgr::Instance()->findTexture("rcp_hot_picked");
+            texture = ResMgr::Instance()->findTexture("rcp_hot_picked");
             break;
         }
-        if (textureContent)
+        if (texture)
         {
+            texturnReturn = texture;
             SDL_Rect rectPicked = {rect.x + 113, rect.y + 65, 0, 0};
-            SDL_QueryTexture(textureContent, nullptr, nullptr, &rectPicked.w, &rectPicked.h);
-            SDL_RenderCopy(renderer, textureContent, nullptr, &rectPicked);
+            SDL_QueryTexture(texture, nullptr, nullptr, &rectPicked.w, &rectPicked.h);
+            SDL_RenderCopy(renderer, texture, nullptr, &rectPicked);
         }
     }
     SDL_RenderDrawRect(renderer, &rect);
-
 }
 
 void MicrowaveOven::onReturn(Meal meal)
 {
-    if(canPlace(meal))mealTarget=meal;
+    mealTarget=meal;
 }
 
 bool MicrowaveOven::canPlace(Meal target)

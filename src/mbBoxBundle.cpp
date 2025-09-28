@@ -3,10 +3,13 @@
 #include "resMgr.h"
 #include "cursorMgr.h"
 
-void MbBoxBundle::onCursorUp()
+bool MbBoxBundle::onCursorUp()
 {
-    if (CursorMgr::Instance()->getPicked() == Meal::MeatBall_Box)
+    if (CursorMgr::Instance()->getPicked() == Meal::MeatBall_Box){
         CursorMgr::Instance()->setPicked(Meal::None);
+        return true;
+    }
+    return false;
 }
 
 void MbBoxBundle::onCursorDown()
@@ -17,7 +20,6 @@ void MbBoxBundle::onCursorDown()
 
 void MbBoxBundle::onRender(SDL_Renderer *renderer)
 {
-    static SDL_Texture *texture = ResMgr::Instance()->findTexture("mb_box_bundle");
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
     SDL_RenderDrawRect(renderer, &rect);
 }

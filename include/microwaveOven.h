@@ -5,15 +5,18 @@
 
 class MicrowaveOven : public Region
 {
+    SDL_Texture* texture = nullptr;
+    SDL_Texture* texturnReturn = nullptr;
 public:
     MicrowaveOven(int x, int y);
     ~MicrowaveOven() = default;
 
-    void onCursorUp() override;
+    bool onCursorUp() override;
     void onCursorDown() override;
     void onUpdate(float delta) override;
     void onRender(SDL_Renderer *renderer) override;
     void onReturn(Meal meal) override;
+    SDL_Texture* getTextureForReturn() override {return texturnReturn; }
 
 private:
     Timer timer;                  // 工作定时器

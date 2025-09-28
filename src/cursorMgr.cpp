@@ -102,11 +102,36 @@ void CursorMgr::onRender(SDL_Renderer *renderer)
     SDL_Rect rectCursor = {posCursor.x, posCursor.y, 64, 64};
     SDL_Texture *textureCursor = ResMgr::Instance()->findTexture(isMouseLbtnDown ? "cursor_down" : "cursor_idle");
     SDL_RenderCopy(renderer, textureCursor, nullptr, &rectCursor);
+
+    // 如果正在归位动画中，绘制归位动画
+    if(isReturning&&textureReturn){
+        SDL_Rect rectReturn;
+        SDL_QueryTexture(textureReturn, nullptr, nullptr, &rectReturn.w, &rectReturn.h);
+        rectReturn.x=static_cast<int>(returnStartPos.x+(returnEndPos.x-returnStartPos.x)*returnProgress)-rectReturn.w/2;
+        rectReturn.y=static_cast<int>(returnStartPos.y+(returnEndPos.y-returnStartPos.y)*returnProgress)-rectReturn.h/2;
+        SDL_RenderCopy(renderer, textureReturn, nullptr, &rectReturn);
+    }
 }
+
+void CursorMgr::onUpdate(float delta){
+    if(isReturning){
+        returnProgress+=delta/returnSpeed;
+        if(returnProgress>=1.0f){
+            if(source)
+                source->onReturn(mealReturning);
+            isReturning=false;
+            returnProgress=0.0f;
+        }
+    }
+}
+
 void CursorMgr::setPicked(Meal meal, Region* src)
 {
     mealPicked = meal;
-    source = src;
+    if(meal==Meal::None)
+        source=nullptr;
+    else
+        source = src;
 }
 
 Meal CursorMgr::getPicked()
@@ -117,6 +142,19 @@ Meal CursorMgr::getPicked()
 Region* CursorMgr::getSource()
 {
     return source;
+}
+
+void CursorMgr::startReturn(){
+    if(mealPicked!=Meal::None&&source){
+        mealReturning=mealPicked;
+        isReturning=true;
+        returnStartPos=posCursor;
+        SDL_Rect srcRect=source->getRect();
+        returnEndPos={srcRect.x+srcRect.w/2,srcRect.y+srcRect.h/2};
+        returnProgress=0.0f;
+        textureReturn=source->getTextureForReturn();
+        mealPicked=Meal::None;
+    }
 }
 
 CursorMgr::CursorMgr() = default;

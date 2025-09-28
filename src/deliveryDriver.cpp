@@ -12,16 +12,18 @@ DeliveryDriver::DeliveryDriver(int x, int y) : Region({x, y, 192, 272})
     refresh();
 }
 
-void DeliveryDriver::onCursorUp()
+bool DeliveryDriver::onCursorUp()
 {
-    if (!isWaiting)return;
+    if (!isWaiting)return false;
 
     Meal mealHeld = CursorMgr::Instance()->getPicked();
     if (mealHeld == Meal::None || checkAndPlace(mealHeld))
     {
         CursorMgr::Instance()->setPicked(Meal::None);
         Mix_PlayChannel(-1, ResMgr::Instance()->findAudio("complete"), 0);
+        return true;
     }
+    return false;
 }
 
 void DeliveryDriver::onUpdate(float delta)

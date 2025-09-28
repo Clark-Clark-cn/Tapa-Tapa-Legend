@@ -25,6 +25,7 @@ void regionMgr::onUpdate(float delta)
 {
     for (auto &pair : regionPool)
         pair.second->onUpdate(delta);
+    CursorMgr::Instance()->onUpdate(delta);
 }
 void regionMgr::onInput(const SDL_Event &event)
 {
@@ -52,13 +53,12 @@ void regionMgr::onInput(const SDL_Event &event)
                 SDL_Point pos = {event.motion.x, event.motion.y};
                 if (SDL_PointInRect(&pos, &pair.second->getRect()))
                 {
-                    pair.second->onCursorUp();
-                    handled = true;
+                    if(pair.second->onCursorUp())
+                        handled=true;
                 }
             }
-            if(!handled&&CursorMgr::Instance()->getPicked()!=Meal::None&&CursorMgr::Instance()->getSource()!=nullptr)
-                CursorMgr::Instance()->getSource()->onReturn(CursorMgr::Instance()->getPicked());
-                CursorMgr::Instance()->setPicked(Meal::None);
+            if(!handled&&CursorMgr::Instance()->getPicked()!=Meal::None)
+                CursorMgr::Instance()->startReturn();
         }
         break;
     }

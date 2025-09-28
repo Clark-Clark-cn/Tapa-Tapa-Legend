@@ -3,10 +3,13 @@
 #include "resMgr.h"
 #include "cursorMgr.h"
 
-void ColaBundle::onCursorUp()
+bool ColaBundle::onCursorUp()
 {
-    if (CursorMgr::Instance()->getPicked() == Meal::Cola)
+    if (CursorMgr::Instance()->getPicked() == Meal::Cola){
         CursorMgr::Instance()->setPicked(Meal::None);
+        return true;
+    }
+    return false;
 }
 
 void ColaBundle::onCursorDown()
@@ -17,7 +20,6 @@ void ColaBundle::onCursorDown()
 
 void ColaBundle::onRender(SDL_Renderer *renderer)
 {
-    static SDL_Texture *texture = ResMgr::Instance()->findTexture("cola_bundle");
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
     SDL_RenderDrawRect(renderer, &rect);
 }

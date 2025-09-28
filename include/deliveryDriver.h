@@ -11,7 +11,7 @@ public:
     DeliveryDriver(int x, int y);
     ~DeliveryDriver() = default;
 
-    void onCursorUp() override;
+    bool onCursorUp() override;
     void onUpdate(float delta) override;
     void onRender(SDL_Renderer *renderer) override;
 

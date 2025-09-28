@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include "meal.h"
+#include "resMgr.h"
 
 class Region
 {
@@ -12,8 +13,9 @@ public:
     virtual void onUpdate(float delta) {}
     virtual void onRender(SDL_Renderer *renderer) {}
     virtual void onCursorDown() {}
-    virtual void onCursorUp() {}
+    virtual bool onCursorUp() {return false; }
     virtual void onReturn(Meal meal) {}
+    virtual SDL_Texture* getTextureForReturn() { return nullptr; }
 
     void setRect(const SDL_Rect &rect)
     {
