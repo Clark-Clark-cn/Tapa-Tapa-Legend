@@ -3,6 +3,8 @@
 #include "timer.h"
 #include "meal.h"
 
+static Point moSize = Config::Instance()->get("region.microwaveOven.size");
+
 class MicrowaveOven : public Region
 {
     SDL_Texture* texture = nullptr;
@@ -22,7 +24,6 @@ private:
     Timer timer;                  // 工作定时器
     bool isWorking = false;       // 当前是否正在工作
     Meal mealTarget = Meal::None; // 加工出的目标餐品
-
 private:
     bool canPlace(Meal target);
 };

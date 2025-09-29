@@ -34,7 +34,7 @@ private:
     bool isReturning = false; // 是否正在归位
     SDL_Point returnStartPos; // 归位起始位置
     SDL_Point returnEndPos;   // 归位结束位置
-    float returnSpeed = 0.5f; // 归位动画速度（单位：秒）
+    float returnSpeed = Config::Instance()->get("cursor.returnTime").asFloat(); // 归位动画速度（单位：秒）
     float returnProgress = 0.0f;  // 归位动画进度
     SDL_Texture* textureReturn = nullptr; // 归位动画纹理
 };

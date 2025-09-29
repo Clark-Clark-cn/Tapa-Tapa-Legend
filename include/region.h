@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include "meal.h"
 #include "resMgr.h"
+#include "config.h"
 
 class Region
 {

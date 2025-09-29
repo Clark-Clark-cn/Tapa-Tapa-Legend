@@ -3,10 +3,12 @@
 #include "resMgr.h"
 #include "cursorMgr.h"
 
-MicrowaveOven::MicrowaveOven(int x, int y) : Region({x, y, 284, 176})
+static const float workTime = Config::Instance()->get("microwaveOven.workTime");
+
+MicrowaveOven::MicrowaveOven(int x, int y) : Region({x, y, moSize.x, moSize.y})
 {
     timer.setOneShot(true);
-    timer.setWaitTime(9.0f);
+    timer.setWaitTime(workTime);
     timer.setOnTimeout([&](){
         isWorking=false;
         Mix_PlayChannel(-1,ResMgr::Instance()->findAudio("complete"),0);

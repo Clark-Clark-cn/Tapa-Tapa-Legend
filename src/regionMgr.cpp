@@ -21,11 +21,30 @@ Region *regionMgr::find(const std::string &name)
     return regionPool[name];
 }
 
+void regionMgr::markForRemoval(const std::string& name)
+{
+    toRemoveQueue.push(name);
+}
+
+void regionMgr::remove(const std::string &name)
+{
+    auto it = regionPool.find(name);
+    if (it != regionPool.end()) {
+        delete it->second; // 释放内存
+        regionPool.erase(it); // 从map中移除
+    }
+}
+
 void regionMgr::onUpdate(float delta)
 {
     for (auto &pair : regionPool)
         pair.second->onUpdate(delta);
     CursorMgr::Instance()->onUpdate(delta);
+
+    while(!toRemoveQueue.empty()) {
+        remove(toRemoveQueue.front());
+        toRemoveQueue.pop();
+    }
 }
 void regionMgr::onInput(const SDL_Event &event)
 {

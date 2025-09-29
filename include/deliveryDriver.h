@@ -31,7 +31,7 @@ private:
     std::vector<Meal> mealList;       // 餐品列表
     std::vector<Status> statusList;   // 餐品状态列表
     int numDrink = 0 , numDish = 0;    // 饮料和菜品数量
-    const float timeWaitedLimit = 40; // 等待超时上限
+    const float timeWaitedLimit = Config::Instance()->get("deliveryDriver.waitTime"); // 等待超时上限
 
 private:
     void refresh();

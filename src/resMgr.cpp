@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <filesystem>
 
+
 ResMgr *ResMgr::manager = nullptr;
 
 ResMgr *ResMgr::Instance()
@@ -30,6 +31,15 @@ SDL_Texture *ResMgr::findTexture(const std::string &name)
     return texturePool[name];
 }
 
+TTF_Font* ResMgr::findFont(const std::string &name)
+{
+    if(fontPool.find(name) == fontPool.end()){
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", ("Font " + name + " not found!").c_str(), nullptr);
+        return nullptr;
+    }
+    return fontPool[name];
+}
+
 void ResMgr::load(SDL_Renderer *renderer){
     using namespace std::filesystem;
 
@@ -46,7 +56,11 @@ void ResMgr::load(SDL_Renderer *renderer){
                 if(chunk)
                     soundPool[path.stem().string()] = chunk;
                 else SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", Mix_GetError(), nullptr);
-
+            }else if(path.extension()==".ttf"){
+                TTF_Font* font = TTF_OpenFont(path.string().c_str(), 24);
+                if(font)
+                    fontPool[path.stem().string()] = font;
+                else SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", TTF_GetError(), nullptr);
             }
         }
     }

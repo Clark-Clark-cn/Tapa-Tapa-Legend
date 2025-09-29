@@ -2,10 +2,16 @@
 
 #include "resMgr.h"
 #include "cursorMgr.h"
+#include "regionMgr.h"
+#include "coin.h"
 
 #include <algorithm>
 
-DeliveryDriver::DeliveryDriver(int x, int y) : Region({x, y, 192, 272})
+static Point ddSize = Config::Instance()->get("region.deliveryDriver.size");
+static int MaxDrinks = Config::Instance()->get("deliveryDriver.maxDrinks");
+static int MaxMeals = Config::Instance()->get("deliveryDriver.maxMeals");
+
+DeliveryDriver::DeliveryDriver(int x, int y) : Region({x, y, ddSize.x, ddSize.y})
 {
     timerRefresh.setOneShot(true);
     timerRefresh.setOnTimeout([&](){ isWaiting = true; });
@@ -44,8 +50,16 @@ void DeliveryDriver::onUpdate(float delta)
     }
 
     // 检查餐品是否完整
-    if (std::count(statusList.begin(), statusList.end(), Status::Waiting) == 0)
+    if (std::count(statusList.begin(), statusList.end(), Status::Waiting) == 0){
+        for(auto meal:mealList){
+            // 生成金币
+            auto id = "coin_" + std::to_string(coinCounter++);
+            auto posX=rect.x + rect.w / 2 - rand()%rect.w/2;
+            auto posY=rect.y + rect.h / 2 - rand()%rect.h/2;
+            regionMgr::Instance()->add(id, new Coin(posX, posY, id));
+        }
         refresh();
+    }
 }
 
 void DeliveryDriver::onRender(SDL_Renderer *renderer)
@@ -57,7 +71,6 @@ void DeliveryDriver::onRender(SDL_Renderer *renderer)
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
 
     // 绘制耐心条
-
     SDL_Rect rectBorder = {rect.x - 35, rect.y + 15, 40, 160};
     SDL_RenderCopy(renderer, ResMgr::Instance()->findTexture("patience_border"), nullptr, &rectBorder);
     SDL_Rect rectContentSrc = {0, 0, rectBorder.w, 0};
@@ -131,9 +144,9 @@ void DeliveryDriver::refresh()
     isMeituan = (rand() % 2 == 0);
 
     // 随机餐品内容
-    numDrink = (rand() % 8);                       // 随机饮料数量0~7
+    numDrink = (rand() % MaxDrinks);                       // 随机饮料数量0~7
     int numLine = (int)std::ceil(numDrink / 2.0f); // 计算饮料所占的行数
-    numDish = 4 - numLine;                         // 计算剩余的菜品个数
+    numDish = MaxMeals - numLine;                         // 计算剩余的菜品个数
     for (int i = 0; i < numDish; i++)              // 随机菜品
     {
         switch (rand() % 3)

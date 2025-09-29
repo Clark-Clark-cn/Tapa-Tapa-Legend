@@ -1,12 +1,14 @@
 #pragma once
 #include "region.h"
 
+static Point tbSize = Config::Instance()->get("region.tbBundle.size");
+
 class TbBundle : public Region
 {
     SDL_Texture* texture = nullptr;
     SDL_Texture* returnTexture = nullptr;
 public:
-    TbBundle(int x, int y) : Region({x, y, 112, 96}) {
+    TbBundle(int x, int y) : Region({x, y, tbSize.x, tbSize.y}) {
         texture = ResMgr::Instance()->findTexture("tb_bundle");
         returnTexture = ResMgr::Instance()->findTexture("tb");
     }
