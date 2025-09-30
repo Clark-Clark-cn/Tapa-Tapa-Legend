@@ -1,9 +1,11 @@
 #pragma once
 #include <SDL.h>
-#include "meal.h"
+#include "screens/game/meal.h"
 #include "resMgr.h"
 #include "config.h"
 
+
+extern bool isDebug;
 class Region
 {
 public:
@@ -15,6 +17,7 @@ public:
     virtual void onRender(SDL_Renderer *renderer) {}
     virtual void onCursorDown() {}
     virtual bool onCursorUp() {return false; }
+    virtual void onCursorRightDown() {}
     virtual void onReturn(Meal meal) {}
     virtual SDL_Texture* getTextureForReturn() { return nullptr; }
 

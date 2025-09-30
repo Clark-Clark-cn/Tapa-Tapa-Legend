@@ -1,4 +1,4 @@
-#include "tbBundle.h"
+#include "screens/game/tbBundle.h"
 
 #include "resMgr.h"
 #include "cursorMgr.h"
@@ -21,5 +21,6 @@ void TbBundle::onCursorDown()
 void TbBundle::onRender(SDL_Renderer *renderer)
 {
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
-    SDL_RenderDrawRect(renderer, &rect);
+
+    if (isDebug)SDL_RenderDrawRect(renderer, &rect);
 }

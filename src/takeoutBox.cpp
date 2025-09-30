@@ -1,4 +1,4 @@
-#include "takeoutBox.h"
+#include "screens/game/takeoutBox.h"
 
 #include "resMgr.h"
 #include "cursorMgr.h"
@@ -83,7 +83,8 @@ void TakeoutBox::onRender(SDL_Renderer *renderer)
         SDL_QueryTexture(texture, nullptr, nullptr, &rectTexture.w, &rectTexture.h);
         SDL_RenderCopy(renderer, texture, nullptr, &rectTexture);
     }
-    SDL_RenderDrawRect(renderer, &rect);
+
+    if (isDebug)SDL_RenderDrawRect(renderer, &rect);
 }
 
 void TakeoutBox::onReturn(Meal target)

@@ -2,6 +2,7 @@
 #include "region.h"
 #include "timer.h"
 #include "meal.h"
+#include "clock.h"
 
 #include <vector>
 
@@ -14,6 +15,9 @@ public:
     bool onCursorUp() override;
     void onUpdate(float delta) override;
     void onRender(SDL_Renderer *renderer) override;
+
+    void setWaitedTime(float val) { timeWaited = val; }
+    float getWaitedTime() const { return timeWaited; }
 
 private:
     // 餐品状态
@@ -36,4 +40,5 @@ private:
 private:
     void refresh();
     bool checkAndPlace(Meal target);
+    Clock* clock = nullptr;
 };

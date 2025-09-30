@@ -17,6 +17,18 @@ public:
     {
         waitTime = val;
     }
+    float getWaitTime() const
+    {
+        return waitTime;
+    }
+    float getPassTime() const
+    {
+        return passTime;
+    }
+    float getLeftTime() const
+    {
+        return waitTime - passTime;
+    }
 
     void setOneShot(bool flag)
     {

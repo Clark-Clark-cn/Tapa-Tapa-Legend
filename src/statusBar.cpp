@@ -1,7 +1,13 @@
-#include "statusBar.h"
+#include "screens/game/statusBar.h"
 
 #include "resMgr.h"
 #include <SDL_ttf.h>
+
+StatusBar::~StatusBar()
+{
+    Config::Instance()->set("money.count", int(money));
+    Config::Instance()->save();
+}
 
 void StatusBar::onRender(SDL_Renderer *renderer)
 {
@@ -21,5 +27,7 @@ void StatusBar::onRender(SDL_Renderer *renderer)
     // 清理资源
     SDL_FreeSurface(textSurface);
     SDL_DestroyTexture(textTexture);
+    if (isDebug)
+        SDL_RenderDrawRect(renderer, &rect);
 }
 

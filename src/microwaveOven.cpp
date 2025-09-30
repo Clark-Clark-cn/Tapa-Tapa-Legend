@@ -1,7 +1,11 @@
-#include "microwaveOven.h"
+#include "screens/game/microwaveOven.h"
+#include "screens/game/upgradeCover.h"
+#include "screens/game/statusBar.h"
 
 #include "resMgr.h"
+#include "regionMgr.h"
 #include "cursorMgr.h"
+#include "screenMgr.h"
 
 static const float workTime = Config::Instance()->get("microwaveOven.workTime");
 
@@ -12,6 +16,11 @@ MicrowaveOven::MicrowaveOven(int x, int y) : Region({x, y, moSize.x, moSize.y})
     timer.setOnTimeout([&](){
         isWorking=false;
         Mix_PlayChannel(-1,ResMgr::Instance()->findAudio("complete"),0);
+    });
+    timerRightClick.setOneShot(true);
+    timerRightClick.setWaitTime(0.5f);
+    timerRightClick.setOnTimeout([&](){
+        isRightClicked=false;
     });
 }
 
@@ -57,10 +66,31 @@ void MicrowaveOven::onCursorDown()
     }
 }
 
+void MicrowaveOven::onCursorRightDown(){
+    if(!isRightClicked){
+        isRightClicked=true;
+        timerRightClick.restart();
+    }
+    else {
+        static auto regionMgr = ScreenMgr::Instance()->getScreen(ScreenID::Game)->getRegionMgr();
+        static StatusBar* statusBar = static_cast<StatusBar*>
+        (regionMgr->find("status_bar"));
+        static const int cost = Config::Instance()->get("microwaveOven.cost");
+        if (statusBar&& statusBar->reduceMoney(cost))
+        {
+            Mix_PlayChannel(-1, ResMgr::Instance()->findAudio("upgrade"), 0);
+            timer.setWaitTime(timer.getWaitTime()*0.75f);
+            regionMgr->add("upgrade_cover_mo", new UpgradeCover(rect.x, rect.y, rect.w, rect.h));
+        }
+    }
+}
+
 void MicrowaveOven::onUpdate(float delta)
 {
     if (isWorking)
         timer.onUpdate(delta);
+    if (isRightClicked)
+        timerRightClick.onUpdate(delta);
 }
 
 void MicrowaveOven::onRender(SDL_Renderer *renderer)
@@ -94,7 +124,8 @@ void MicrowaveOven::onRender(SDL_Renderer *renderer)
             SDL_RenderCopy(renderer, texture, nullptr, &rectPicked);
         }
     }
-    SDL_RenderDrawRect(renderer, &rect);
+
+    if (isDebug)SDL_RenderDrawRect(renderer, &rect);
 }
 
 void MicrowaveOven::onReturn(Meal meal)

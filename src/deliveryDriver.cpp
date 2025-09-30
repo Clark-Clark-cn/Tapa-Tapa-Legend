@@ -1,9 +1,9 @@
-#include "deliveryDriver.h"
+#include "screens/game/deliveryDriver.h"
+#include "screens/game/coin.h"
 
 #include "resMgr.h"
 #include "cursorMgr.h"
-#include "regionMgr.h"
-#include "coin.h"
+#include "screenMgr.h"
 
 #include <algorithm>
 
@@ -11,10 +11,17 @@ static Point ddSize = Config::Instance()->get("region.deliveryDriver.size");
 static int MaxDrinks = Config::Instance()->get("deliveryDriver.maxDrinks");
 static int MaxMeals = Config::Instance()->get("deliveryDriver.maxMeals");
 
+static int clockCounter = 0;
+
 DeliveryDriver::DeliveryDriver(int x, int y) : Region({x, y, ddSize.x, ddSize.y})
 {
+    Point clockSize= Config::Instance()->get("region.clock.size");
+    clock = new Clock(x + ddSize.x/2-clockSize.x/2, y - clockSize.y, this);
+    clock->setVisible(false);
+    static auto regionMgr = ScreenMgr::Instance()->getScreen(ScreenID::Game)->getRegionMgr();
+    regionMgr->add(("clock"+std::to_string(clockCounter++)), clock);
     timerRefresh.setOneShot(true);
-    timerRefresh.setOnTimeout([&](){ isWaiting = true; });
+    timerRefresh.setOnTimeout([&](){ isWaiting = true; clock->setVisible(true); });
     refresh();
 }
 
@@ -51,12 +58,14 @@ void DeliveryDriver::onUpdate(float delta)
 
     // 检查餐品是否完整
     if (std::count(statusList.begin(), statusList.end(), Status::Waiting) == 0){
-        for(auto meal:mealList){
+        static const float coinMultiplier = Config::Instance()->get("deliveryDriver.coinMultiplier");
+        for(auto meal=0; meal<=mealList.size()*coinMultiplier; meal++){
             // 生成金币
             auto id = "coin_" + std::to_string(coinCounter++);
             auto posX=rect.x + rect.w / 2 - rand()%rect.w/2;
             auto posY=rect.y + rect.h / 2 - rand()%rect.h/2;
-            regionMgr::Instance()->add(id, new Coin(posX, posY, id));
+            static auto regionMgr = ScreenMgr::Instance()->getScreen(ScreenID::Game)->getRegionMgr();
+            regionMgr->add(id, new Coin(posX, posY, id));
         }
         refresh();
     }
@@ -98,6 +107,7 @@ void DeliveryDriver::onRender(SDL_Renderer *renderer)
         case Meal::RedCookedPork_Hot:
             textureMeal = ResMgr::Instance()->findTexture("rcp_icon");
             break;
+        default: break;
         }
 
         SDL_Rect rectMeal = {rectBubble.x + 18, rectBubble.y + 32 * i + 5, 45, 25};
@@ -115,6 +125,7 @@ void DeliveryDriver::onRender(SDL_Renderer *renderer)
         case Meal::Sprite:
             textureDrink = ResMgr::Instance()->findTexture("sprite_icon");
             break;
+        default: break;
         }
 
         SDL_Rect rectDrink = {rectBubble.x + 18, 0, 20, 26};
@@ -125,13 +136,14 @@ void DeliveryDriver::onRender(SDL_Renderer *renderer)
         SDL_SetTextureAlphaMod(textureDrink, (Uint8)((statusList[i] == Status::Waiting ? 1.0f : 0.35f) * 225));
         SDL_RenderCopy(renderer, textureDrink, nullptr, &rectDrink);
     }
-    SDL_RenderDrawRect(renderer, &rect);
+    if (isDebug)SDL_RenderDrawRect(renderer, &rect);
 }
 void DeliveryDriver::refresh()
 {
     // 重置状态
     timeWaited = 0;
     isWaiting = false;
+    clock->setVisible(false);
     mealList.clear();
     statusList.clear();
     numDrink = 0, numDish = 0;

@@ -1,15 +1,6 @@
 #include "regionMgr.h"
 #include "cursorMgr.h"
 
-regionMgr *regionMgr::manager = nullptr;
-
-regionMgr *regionMgr::Instance()
-{
-    if (!manager)
-        manager = new regionMgr();
-
-    return manager;
-}
 
 void regionMgr:: add(const std::string &name, Region *region)
 {
@@ -24,6 +15,16 @@ Region *regionMgr::find(const std::string &name)
 void regionMgr::markForRemoval(const std::string& name)
 {
     toRemoveQueue.push(name);
+}
+
+void regionMgr::markForRemoval(Region* region)
+{
+    for (const auto& pair : regionPool) {
+        if (pair.second == region) {
+            toRemoveQueue.push(pair.first);
+            break; // 找到后退出循环
+        }
+    }
 }
 
 void regionMgr::remove(const std::string &name)
@@ -79,6 +80,17 @@ void regionMgr::onInput(const SDL_Event &event)
             if(!handled&&CursorMgr::Instance()->getPicked()!=Meal::None)
                 CursorMgr::Instance()->startReturn();
         }
+        break;
+    case SDL_MOUSEBUTTONDOWN:
+            if (event.button.button == SDL_BUTTON_RIGHT)
+            {
+                for (auto &pair : regionPool)
+                {
+                    SDL_Point pos = {event.motion.x, event.motion.y};
+                    if (SDL_PointInRect(&pos, &pair.second->getRect()))
+                        pair.second->onCursorRightDown();
+                }
+            }
         break;
     }
 }

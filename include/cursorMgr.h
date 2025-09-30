@@ -1,5 +1,5 @@
 #pragma once
-#include "meal.h"
+#include "screens/game/meal.h"
 #include "region.h"
 #include <SDL.h>
 

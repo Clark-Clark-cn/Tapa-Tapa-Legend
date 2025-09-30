@@ -103,10 +103,12 @@ void Config::defaults(){
     setifno("region.microwaveOven.size", Point(284,176));
     setifno("region.rcpBoxBundle.size", Point(160,88));
     setifno("region.spriteBundle.size", Point(120,124));
-    setifno("region.takeoutBox.size", Point(92,50));
+    setifno("region.takeoutBox.size", Point(120,55));
     setifno("region.tbBundle.size", Point(112,96));
     setifno("region.trashCan.size", Point(143,140));
     setifno("region.deliveryDriver.size", Point(192,272));
+    setifno("region.clock.size", Point(64,64));
+    setifno("region.coin.size",Point(30,30));
 
     setifno("region.deliveryDriver1.pos", Point(385, 142));
     setifno("region.deliveryDriver2.pos", Point(690, 142));
@@ -119,17 +121,27 @@ void Config::defaults(){
     setifno("region.rcpBoxBundle.pos", Point(565, 520));
     setifno("region.microwaveOven1.pos", Point(740, 400));
     setifno("region.microwaveOven2.pos", Point(975, 400));
-    setifno("region.takeoutBox1.pos", Point(830, 580));
-    setifno("region.takeoutBox2.pos", Point(935, 580));
-    setifno("region.takeoutBox3.pos", Point(1040, 580));
-    setifno("region.takeoutBox4.pos", Point(1145, 580));
+    setifno("region.takeoutBox1.pos", Point(750, 580));
+    setifno("region.takeoutBox2.pos", Point(875, 580));
+    setifno("region.takeoutBox3.pos", Point(1000, 580));
+    setifno("region.takeoutBox4.pos", Point(1125, 580));
     setifno("region.trashCan.pos", Point(50, 550));
+
+    setifno("region.start.pos",Point(500,300));
+    setifno("region.start.size",Point(280,120));
 
     setifno("deliveryDriver.waitTime", 40.0f);
     setifno("deliveryDriver.maxDrinks", 8);
     setifno("deliveryDriver.maxMeals", 4);
+    setifno("deliveryDriver.coinMultiplier", 1.5f);
+    setifno("clock.cost", 5);
+    setifno("microwaveOven.cost", 20);
     setifno("microwaveOven.workTime", 5.0f);
     setifno("cursor.returnTime", 0.2f);
+    setifno("money.count", 100);
+
+    setifno("time.game",300.0f);
+    setifno("time.GoMenu", 2.0f);
 
     setifno("window.width", 1280);
     setifno("window.height", 720);

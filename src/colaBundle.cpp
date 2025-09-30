@@ -1,4 +1,4 @@
-#include "colaBundle.h"
+#include "screens/game/colaBundle.h"
 
 #include "resMgr.h"
 #include "cursorMgr.h"
@@ -21,5 +21,6 @@ void ColaBundle::onCursorDown()
 void ColaBundle::onRender(SDL_Renderer *renderer)
 {
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
-    SDL_RenderDrawRect(renderer, &rect);
+    if (isDebug)
+        SDL_RenderDrawRect(renderer, &rect);
 }

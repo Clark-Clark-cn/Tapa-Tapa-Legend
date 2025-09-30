@@ -1,4 +1,4 @@
-#include "rcpBoxBundle.h"
+#include "screens/game/rcpBoxBundle.h"
 
 #include "resMgr.h"
 #include "cursorMgr.h"
@@ -21,5 +21,6 @@ void RcpBoxBundle::onCursorDown()
 void RcpBoxBundle::onRender(SDL_Renderer *renderer)
 {
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
-    SDL_RenderDrawRect(renderer, &rect);
+
+    if (isDebug)SDL_RenderDrawRect(renderer, &rect);
 }

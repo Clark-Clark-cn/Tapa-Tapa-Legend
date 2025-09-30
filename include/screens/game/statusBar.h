@@ -3,10 +3,10 @@
 #include "region.h"
 
 class StatusBar: public Region {
-    unsigned int money = 0;
+    unsigned int money = Config::Instance()->get("money.count").asInt();
 public:
     StatusBar(int x, int y) : Region({x, y, 1280, 50}) {}
-    ~StatusBar() = default;
+    ~StatusBar();
     void onRender(SDL_Renderer *renderer)override;
     void addMoney(int delta) { money += delta; }
     int getMoney() const { return money; }

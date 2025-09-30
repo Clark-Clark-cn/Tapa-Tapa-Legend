@@ -1,4 +1,4 @@
-#include "trashCan.h"
+#include "screens/game/trashCan.h"
 
 #include "resMgr.h"
 #include "cursorMgr.h"
@@ -17,5 +17,6 @@ void TrashCan::onRender(SDL_Renderer *renderer)
 {
     static SDL_Texture *texture = ResMgr::Instance()->findTexture("trash_can");
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
-    SDL_RenderDrawRect(renderer, &rect);
+    
+    if (isDebug)SDL_RenderDrawRect(renderer, &rect);
 }
