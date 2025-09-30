@@ -43,6 +43,8 @@ bool MicrowaveOven::onCursorUp()
         case Meal::RedCookedPork_Cold:
             mealTarget = Meal::RedCookedPork_Hot;
             break;
+        default:
+            break;
         }
 
         timer.restart();
@@ -114,6 +116,8 @@ void MicrowaveOven::onRender(SDL_Renderer *renderer)
             break;
         case Meal::RedCookedPork_Hot:
             texture = ResMgr::Instance()->findTexture("rcp_hot_picked");
+            break;
+        default:
             break;
         }
         if (texture)

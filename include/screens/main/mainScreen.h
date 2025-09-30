@@ -9,8 +9,8 @@ public:
     MainScreen();
     ~MainScreen()=default;
 
-    void onInput(const SDL_Event& event);
-    void onRender(SDL_Renderer* renderer);
+    void onInput(const SDL_Event& event)override;
+    void onRender(SDL_Renderer* renderer)override;
 
     regionMgr* getRegionMgr()override;
 };

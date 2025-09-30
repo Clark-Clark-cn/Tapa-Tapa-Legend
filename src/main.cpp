@@ -1,5 +1,3 @@
-#define SDL_MAIN_HANDLED
-
 #include "resMgr.h"
 #include "cursorMgr.h"
 #include "screenMgr.h"
@@ -85,7 +83,7 @@ Press OK and this tip would NOT show again.
     return renderer;
 }
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
     using namespace std::chrono;
     SDL_Renderer *renderer = init();

@@ -25,6 +25,8 @@ bool TakeoutBox::onCursorUp()
             CursorMgr::Instance()->setPicked(Meal::None);
             return true;
             break;
+        default:
+            break;
         }
     }
     // 否则如果当前位置没有物品并且光标抓取了可放置的物品
@@ -73,6 +75,9 @@ void TakeoutBox::onRender(SDL_Renderer *renderer)
         break;
     case Meal::TakeoutBox:
         texture = ResMgr::Instance()->findTexture("tb");
+        break;
+    default:
+        texture = nullptr;
         break;
     }
 
