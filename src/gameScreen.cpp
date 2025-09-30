@@ -159,6 +159,8 @@ void GameScreen::onEnter() {
     static StatusBar* statusBar = static_cast<StatusBar*>(mgr.find("status_bar"));
     moneyBegin=statusBar->getMoney();
     paused = false;
+    gameOver=false;
+    gameOverProgress=0;
 }
 
 void GameScreen::onExit() {

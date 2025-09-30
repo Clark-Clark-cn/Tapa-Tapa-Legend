@@ -124,7 +124,21 @@ void MicrowaveOven::onRender(SDL_Renderer *renderer)
             SDL_RenderCopy(renderer, texture, nullptr, &rectPicked);
         }
     }
-
+    if(isRightClicked){
+        // 绘制倒计时
+        SDL_Color textColor = {255, 255, 255, 255}; // 白色
+        std::string cost = std::to_string(Config::Instance()->get("microwaveOven.cost").asInt());
+        SDL_Surface *textSurface = TTF_RenderText_Blended(ResMgr::Instance()->findFont("text"), cost.c_str(), textColor);
+        SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        SDL_Rect textRect = {rect.x + 5, rect.y + 5, textSurface->w, textSurface->h};
+        SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
+        SDL_Rect iconRect = {textRect.x + textRect.w, textRect.y, textRect.h, textRect.h};
+        static SDL_Texture* coin=ResMgr::Instance()->findTexture("coin");
+        SDL_RenderCopy(renderer,coin,nullptr,&iconRect);
+        // 清理资源
+        SDL_FreeSurface(textSurface);
+        SDL_DestroyTexture(textTexture);
+    }
     if (isDebug)SDL_RenderDrawRect(renderer, &rect);
 }
 

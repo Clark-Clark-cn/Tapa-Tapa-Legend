@@ -23,6 +23,7 @@ SDL_Renderer* init(){
 
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 
+    srand(time(nullptr));
 
     bool showTips=Config::Instance()->get("showTips");
     if(showTips){
