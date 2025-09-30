@@ -149,5 +149,6 @@ void Config::defaults(){
     setifno("window.fps", 144);
     setifno("window.vsync", false);
     setifno("audio.volume", 64);
+    setifno("showTips",true);
     save();
 }

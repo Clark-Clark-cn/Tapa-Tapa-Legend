@@ -10,6 +10,7 @@
 
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 bool isDebug = false;
 static SDL_Window *window = nullptr;
@@ -22,6 +23,35 @@ SDL_Renderer* init(){
 
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 
+
+    bool showTips=Config::Instance()->get("showTips");
+    if(showTips){
+        const SDL_MessageBoxButtonData buttons[]={
+            {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT,0,"OK"},
+            {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT,0,"Alright"}
+        };
+        SDL_MessageBoxData mb{
+            SDL_MESSAGEBOX_INFORMATION, window,"tips",
+R"(here is the tips for Tapa Tapa Legend
+First, you can drag food or boxes through your mouse
+Second, you can double right click on the microwave oven to upgrade it 
+Third, you can click the clock on the delivery driver to make him/her wait you more time
+but you need to pay him/her some money
+Fourth, you need to pick up coins by yourself, you can drag your mouse through it would be picked up
+Fifth, delivery driver would go if you cannot finish your meal in time,
+and your dishes or drinks would gone, too.
+Press OK and this tip would NOT show again.
+)",SDL_arraysize(buttons),
+        buttons,
+        nullptr};
+        int buttonID=-1;
+        SDL_ShowMessageBox(&mb,&buttonID);
+        std::cout<<SDL_GetError()<<std::endl;
+        if(buttonID==0){
+            Config::Instance()->set("showTips",false);
+            Config::Instance()->save();
+        }
+    }
     const int windowWidth = Config::Instance()->get("window.width").asInt();
     const int windowHeight = Config::Instance()->get("window.height").asInt();
     window = SDL_CreateWindow("Tapa Tapa Legend",
